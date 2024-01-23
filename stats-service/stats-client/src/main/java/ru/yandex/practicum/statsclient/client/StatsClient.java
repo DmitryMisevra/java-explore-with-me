@@ -35,20 +35,16 @@ public class StatsClient {
     }
 
     public ResponseEntity<List<StatsDto>> getStats(String start, String end, String[] uris, Boolean unique) {
-        StringBuilder pathBuilder = new StringBuilder("/stats?start={start}&end={end}");
+        StringBuilder pathBuilder = new StringBuilder("/stats?start={start}&end={end}&unique={unique}");
 
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("start", start);
         parameters.put("end", end);
+        parameters.put("unique", unique);
 
         if (uris != null) {
             parameters.put("uris", uris);
             pathBuilder.append("&uris={uris}");
-        }
-
-        if (unique != null) {
-            parameters.put("unique", unique);
-            pathBuilder.append("&unique={unique}");
         }
 
         return rest.exchange(

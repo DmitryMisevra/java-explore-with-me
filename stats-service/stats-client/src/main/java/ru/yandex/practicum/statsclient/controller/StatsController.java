@@ -50,7 +50,7 @@ public class StatsController {
     public ResponseEntity<List<StatsDto>> getStats(@RequestParam String start,
                                                    @RequestParam String end,
                                                    @RequestParam(required = false) String[] uris,
-                                                   @RequestParam(required = false) Boolean unique) {
+                                                   @RequestParam(defaultValue = "false") Boolean unique) {
         return statsClient.getStats(start, end, uris, unique);
     }
 }

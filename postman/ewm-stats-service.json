@@ -1,0 +1,1007 @@
+{
+	"info": {
+		"_postman_id": "31bd9cd1-ebf3-4113-81c9-b73f2116509c",
+		"name": "Sprint 17 Ewm (stats-svc)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "add hit 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Ответ должен содержать код статуса 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Ответ должен быть в формате JSON\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							"pm.test(\"Проверка поля 'id'\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('id');",
+							"    pm.expect(jsonData.id, '\"id\" должен быть равен 1').to.eql(1);",
+							"});",
+							"",
+							"pm.test(\"Проверка поля 'app'\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('app');",
+							"    pm.expect(jsonData.app, '\"app\" должен \"test-app1\"').to.eql(\"test-app1\");",
+							"});",
+							"",
+							"pm.test(\"Проверка поля 'ip'\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('ip');",
+							"    pm.expect(jsonData.ip, '\"ip\" должен \"192.163.0.1\"').to.eql(\"192.163.0.1\");",
+							"});",
+							"",
+							"pm.test(\"Проверка поля 'uri'\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('uri');",
+							"    pm.expect(jsonData.uri, '\"uri\" должен быть \"/testuri/1\"').to.eql(\"/testuri/1\");",
+							"});",
+							"",
+							"pm.test(\"Проверка поля 'timestamp'\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('timestamp');",
+							"    pm.expect(jsonData.timestamp, '\"timestamp\" должен \"2021-01-01T11:30:00\"').to.eql(\"2021-01-01T11:30:00\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"app\": \"test-app1\",\n  \"uri\": \"/testuri/1\",\n  \"ip\": \"192.163.0.1\",\n  \"timestamp\": \"2021-01-01 11:30:00\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/hit",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"hit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add hit 2 same app/uri/ip diff time",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Ответ должен содержать код статуса 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Ответ должен быть в формате JSON\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							"pm.test(\"Проверка поля 'id'\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('id');",
+							"    pm.expect(jsonData.id, '\"id\" должен быть равен 2').to.eql(2);",
+							"});",
+							"",
+							"pm.test(\"Проверка поля 'app'\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('app');",
+							"    pm.expect(jsonData.app, '\"app\" должен \"test-app1\"').to.eql(\"test-app1\");",
+							"});",
+							"",
+							"pm.test(\"Проверка поля 'ip'\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('ip');",
+							"    pm.expect(jsonData.ip, '\"ip\" должен \"192.163.0.1\"').to.eql(\"192.163.0.1\");",
+							"});",
+							"",
+							"pm.test(\"Проверка поля 'uri'\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('uri');",
+							"    pm.expect(jsonData.uri, '\"uri\" должен быть \"/testuri/1\"').to.eql(\"/testuri/1\");",
+							"});",
+							"",
+							"pm.test(\"Проверка поля 'timestamp'\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('timestamp');",
+							"    pm.expect(jsonData.timestamp, '\"timestamp\" должен \"2021-02-01T12:00:00\"').to.eql(\"2021-02-01T12:00:00\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"app\": \"test-app1\",\n  \"uri\": \"/testuri/1\",\n  \"ip\": \"192.163.0.1\",\n  \"timestamp\": \"2021-02-01 12:00:00\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/hit",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"hit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add hit 3 new app",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Ответ должен содержать код статуса 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Ответ должен быть в формате JSON\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							"pm.test(\"Проверка поля 'id'\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('id');",
+							"    pm.expect(jsonData.id, '\"id\" должен быть равен 3').to.eql(3);",
+							"});",
+							"",
+							"pm.test(\"Проверка поля 'app'\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('app');",
+							"    pm.expect(jsonData.app, '\"app\" должен \"test-app2\"').to.eql(\"test-app2\");",
+							"});",
+							"",
+							"pm.test(\"Проверка поля 'ip'\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('ip');",
+							"    pm.expect(jsonData.ip, '\"ip\" должен \"192.163.0.1\"').to.eql(\"192.163.0.1\");",
+							"});",
+							"",
+							"pm.test(\"Проверка поля 'uri'\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('uri');",
+							"    pm.expect(jsonData.uri, '\"uri\" должен быть \"/testuri/1\"').to.eql(\"/testuri/1\");",
+							"});",
+							"",
+							"pm.test(\"Проверка поля 'timestamp'\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('timestamp');",
+							"    pm.expect(jsonData.timestamp, '\"timestamp\" должен \"2021-01-01T11:10:23\"').to.eql(\"2021-01-01T11:10:23\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"app\": \"test-app2\",\n  \"uri\": \"/testuri/1\",\n  \"ip\": \"192.163.0.1\",\n  \"timestamp\": \"2021-01-01 11:10:23\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/hit",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"hit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add hit 4 same new app/uri/ip diff time",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Ответ должен содержать код статуса 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Ответ должен быть в формате JSON\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							"pm.test(\"Проверка поля 'id'\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('id');",
+							"    pm.expect(jsonData.id, '\"id\" должен быть равен 4').to.eql(4);",
+							"});",
+							"",
+							"pm.test(\"Проверка поля 'app'\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('app');",
+							"    pm.expect(jsonData.app, '\"app\" должен \"test-app2\"').to.eql(\"test-app2\");",
+							"});",
+							"",
+							"pm.test(\"Проверка поля 'ip'\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('ip');",
+							"    pm.expect(jsonData.ip, '\"ip\" должен \"192.163.0.1\"').to.eql(\"192.163.0.1\");",
+							"});",
+							"",
+							"pm.test(\"Проверка поля 'uri'\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('uri');",
+							"    pm.expect(jsonData.uri, '\"uri\" должен быть \"/testuri/1\"').to.eql(\"/testuri/1\");",
+							"});",
+							"",
+							"pm.test(\"Проверка поля 'timestamp'\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('timestamp');",
+							"    pm.expect(jsonData.timestamp, '\"timestamp\" должен \"2021-02-01T11:10:23\"').to.eql(\"2021-02-01T11:10:23\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"app\": \"test-app2\",\n  \"uri\": \"/testuri/1\",\n  \"ip\": \"192.163.0.1\",\n  \"timestamp\": \"2021-02-01 11:10:23\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/hit",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"hit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add hit 5 same as 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Ответ должен содержать код статуса 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Ответ должен быть в формате JSON\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							"pm.test(\"Проверка поля 'id'\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('id');",
+							"    pm.expect(jsonData.id, '\"id\" должен быть равен 5').to.eql(5);",
+							"});",
+							"",
+							"pm.test(\"Проверка поля 'app'\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('app');",
+							"    pm.expect(jsonData.app, '\"app\" должен \"test-app1\"').to.eql(\"test-app1\");",
+							"});",
+							"",
+							"pm.test(\"Проверка поля 'ip'\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('ip');",
+							"    pm.expect(jsonData.ip, '\"ip\" должен \"192.163.0.1\"').to.eql(\"192.163.0.1\");",
+							"});",
+							"",
+							"pm.test(\"Проверка поля 'uri'\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('uri');",
+							"    pm.expect(jsonData.uri, '\"uri\" должен быть \"/testuri/1\"').to.eql(\"/testuri/1\");",
+							"});",
+							"",
+							"pm.test(\"Проверка поля 'timestamp'\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('timestamp');",
+							"    pm.expect(jsonData.timestamp, '\"timestamp\" должен \"2021-01-06T11:10:23\"').to.eql(\"2021-01-06T11:10:23\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"app\": \"test-app1\",\n  \"uri\": \"/testuri/1\",\n  \"ip\": \"192.163.0.1\",\n  \"timestamp\": \"2021-01-06 11:10:23\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/hit",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"hit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get stats without uris/unique correct",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function () {",
+							"    pm.response.to.be.ok;    ",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							"const target = pm.response.json();",
+							"",
+							"pm.test(\"Посты должны содержать поля: app, uri, hits\", function () {",
+							"    pm.expect(target[0]).to.have.all.keys('app', 'uri', 'hits');",
+							"    pm.expect(target[1]).to.have.all.keys('app', 'uri', 'hits');",
+							"});",
+							"",
+							"pm.test(\"В теле ответа должна соблюдаться сортировка по убыванию количества просмотров\", function(){",
+							"    pm.expect(target[0].hits).to.be.above(target[1].hits);",
+							"});",
+							"",
+							"pm.test(\"Проверка соответствия реального количества просмотров событий и сохраненных хитов\", function(){",
+							"    pm.expect(2).equal(target[0].hits);",
+							"    pm.expect(1).equal(target[1].hits);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "*/*",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/stats?start=2021-01-01+00%3A00%3A00&end=2021-02-01+00%3A00%3A00",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"stats"
+					],
+					"query": [
+						{
+							"key": "start",
+							"value": "2021-01-01+00%3A00%3A00"
+						},
+						{
+							"key": "end",
+							"value": "2021-02-01+00%3A00%3A00"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get stats without uris/unique invalid when incorrect time format",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Должен быть возвращен статус ответа 400\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([400]);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "*/*"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/stats?start=2021-01-01+00%3A00%3A00&end=2021-02-01+00%3A00%A00",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"stats"
+					],
+					"query": [
+						{
+							"key": "start",
+							"value": "2021-01-01+00%3A00%3A00"
+						},
+						{
+							"key": "end",
+							"value": "2021-02-01+00%3A00%A00"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get stats without uris/unique invalid when end before start",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Должен быть возвращен статус ответа 400\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([400]);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "*/*"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/stats?start=2021-01-01+00%3A00%3A00&end=2020-12-31+23%3A59%3A59",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"stats"
+					],
+					"query": [
+						{
+							"key": "start",
+							"value": "2021-01-01+00%3A00%3A00"
+						},
+						{
+							"key": "end",
+							"value": "2020-12-31+23%3A59%3A59"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get stats without uris/unique invalid when start is equal to end",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Должен быть возвращен статус ответа 400\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([400]);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "*/*"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/stats?start=2021-01-01+00%3A00%3A00&end=2021-01-01+00%3A00%3A00",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"stats"
+					],
+					"query": [
+						{
+							"key": "start",
+							"value": "2021-01-01+00%3A00%3A00"
+						},
+						{
+							"key": "end",
+							"value": "2021-01-01+00%3A00%3A00"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get stats without uris with unique=true correct",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function () {",
+							"    pm.response.to.be.ok;    ",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							"const target = pm.response.json();",
+							"",
+							"pm.test(\"Посты должны содержать поля: app, uri, hits\", function () {",
+							"    pm.expect(target[0]).to.have.all.keys('app', 'uri', 'hits');",
+							"    pm.expect(target[1]).to.have.all.keys('app', 'uri', 'hits');",
+							"});",
+							"",
+							"pm.test(\"Проверка соответствия реального количества просмотров событий и сохраненных хитов\", function(){",
+							"    pm.expect(1).equal(target[0].hits);",
+							"    pm.expect(1).equal(target[1].hits);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "*/*",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/stats?start=2021-01-01+00%3A00%3A00&end=2022-02-01+00%3A00%3A00&unique=true",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"stats"
+					],
+					"query": [
+						{
+							"key": "start",
+							"value": "2021-01-01+00%3A00%3A00"
+						},
+						{
+							"key": "end",
+							"value": "2022-02-01+00%3A00%3A00"
+						},
+						{
+							"key": "unique",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add hit 6 diff url",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Ответ должен содержать код статуса 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Ответ должен быть в формате JSON\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							"pm.test(\"Проверка поля 'id'\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('id');",
+							"    pm.expect(jsonData.id, '\"id\" должен быть равен 5').to.eql(6);",
+							"});",
+							"",
+							"pm.test(\"Проверка поля 'app'\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('app');",
+							"    pm.expect(jsonData.app, '\"app\" должен \"test-app1\"').to.eql(\"test-app1\");",
+							"});",
+							"",
+							"pm.test(\"Проверка поля 'ip'\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('ip');",
+							"    pm.expect(jsonData.ip, '\"ip\" должен \"192.163.0.1\"').to.eql(\"192.163.0.1\");",
+							"});",
+							"",
+							"pm.test(\"Проверка поля 'uri'\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('uri');",
+							"    pm.expect(jsonData.uri, '\"uri\" должен быть \"/testuri/2\"').to.eql(\"/testuri/2\");",
+							"});",
+							"",
+							"pm.test(\"Проверка поля 'timestamp'\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('timestamp');",
+							"    pm.expect(jsonData.timestamp, '\"timestamp\" должен \"2021-01-06T11:10:23\"').to.eql(\"2021-01-06T11:10:23\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"app\": \"test-app1\",\n  \"uri\": \"/testuri/2\",\n  \"ip\": \"192.163.0.1\",\n  \"timestamp\": \"2021-01-06 11:10:23\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/hit",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"hit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add hit 7 diff url 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Ответ должен содержать код статуса 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Ответ должен быть в формате JSON\", function () {",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							"pm.test(\"Проверка поля 'id'\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('id');",
+							"    pm.expect(jsonData.id, '\"id\" должен быть равен 7').to.eql(7);",
+							"});",
+							"",
+							"pm.test(\"Проверка поля 'app'\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('app');",
+							"    pm.expect(jsonData.app, '\"app\" должен \"test-app1\"').to.eql(\"test-app1\");",
+							"});",
+							"",
+							"pm.test(\"Проверка поля 'ip'\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('ip');",
+							"    pm.expect(jsonData.ip, '\"ip\" должен \"192.163.0.1\"').to.eql(\"192.163.0.1\");",
+							"});",
+							"",
+							"pm.test(\"Проверка поля 'uri'\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('uri');",
+							"    pm.expect(jsonData.uri, '\"uri\" должен быть \"/testuri/3\"').to.eql(\"/testuri/3\");",
+							"});",
+							"",
+							"pm.test(\"Проверка поля 'timestamp'\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('timestamp');",
+							"    pm.expect(jsonData.timestamp, '\"timestamp\" должен \"2021-01-06T11:10:23\"').to.eql(\"2021-01-06T11:10:23\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"app\": \"test-app1\",\n  \"uri\": \"/testuri/3\",\n  \"ip\": \"192.163.0.1\",\n  \"timestamp\": \"2021-01-06 11:10:23\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/hit",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"hit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get stats with uris correct",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function () {",
+							"    pm.response.to.be.ok;    ",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							"const target = pm.response.json();",
+							"",
+							"pm.test(\"Проверка длины списка\", function () {",
+							"    pm.expect(target.length, 'Длина списка должна быть равна 2').to.eql(2);",
+							"});",
+							"",
+							"pm.test(\"Посты должны содержать поля: app, uri, hits\", function () {",
+							"    pm.expect(target[0]).to.have.all.keys('app', 'uri', 'hits');",
+							"    pm.expect(target[1]).to.have.all.keys('app', 'uri', 'hits');",
+							"});",
+							"",
+							"pm.test(\"Проверка соответствия реального количества просмотров событий и сохраненных хитов\", function(){",
+							"    pm.expect(1).equal(target[0].hits);",
+							"    pm.expect(1).equal(target[1].hits);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "*/*",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/stats?start=2021-01-01+00%3A00%3A00&end=2022-02-01+00%3A00%3A00&unique=false&uris=/testuri/2&uris=/testuri/3",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"stats"
+					],
+					"query": [
+						{
+							"key": "start",
+							"value": "2021-01-01+00%3A00%3A00"
+						},
+						{
+							"key": "end",
+							"value": "2022-02-01+00%3A00%3A00"
+						},
+						{
+							"key": "unique",
+							"value": "false"
+						},
+						{
+							"key": "uris",
+							"value": "/testuri/2"
+						},
+						{
+							"key": "uris",
+							"value": "/testuri/3"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get stats with wrong uris return empty list",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function () {",
+							"    pm.response.to.be.ok;    ",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							"const target = pm.response.json();",
+							"",
+							"pm.test(\"Проверка длины списка\", function () {",
+							"    pm.expect(target.length, 'Длина списка должна быть равна 0').to.eql(0);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "*/*"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/stats?start=2021-01-01+00%3A00%3A00&end=2022-02-01+00%3A00%3A00&unique=false&uris=/testuri/4",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"stats"
+					],
+					"query": [
+						{
+							"key": "start",
+							"value": "2021-01-01+00%3A00%3A00"
+						},
+						{
+							"key": "end",
+							"value": "2022-02-01+00%3A00%3A00"
+						},
+						{
+							"key": "unique",
+							"value": "false"
+						},
+						{
+							"key": "uris",
+							"value": "/testuri/4"
+						},
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080"
+		}
+	]
+}

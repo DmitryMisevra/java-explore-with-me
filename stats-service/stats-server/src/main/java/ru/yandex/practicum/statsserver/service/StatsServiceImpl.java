@@ -2,6 +2,7 @@ package ru.yandex.practicum.statsserver.service;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,8 +18,11 @@ import ru.yandex.practicum.statsserver.repository.StatsRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 @Service
@@ -41,9 +45,9 @@ public class StatsServiceImpl implements StatsService {
 
     @Override
     public List<StatsDto> getStats(String start, String end, String[] uris, Boolean unique) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime startTime = LocalDateTime.parse(start, formatter);
-        LocalDateTime endTime = LocalDateTime.parse(end, formatter);
+
+        LocalDateTime startTime = convertStringToLocalDateTime(start);
+        LocalDateTime endTime = convertStringToLocalDateTime(end);
 
         if (startTime.isAfter(endTime)) {
             throw new DateTimeValidationException("Время начала события не может быть позже времени его окончания");
@@ -66,16 +70,30 @@ public class StatsServiceImpl implements StatsService {
         JPAQuery<?> query = new JPAQuery<Void>(entityManager);
         QHit qHit = QHit.hit;
 
+        NumberExpression<Long> hitsExpression = unique ? qHit.ip.countDistinct() : qHit.ip.count();
+
+
         JPAQuery<StatsDto> jpqlQuery = query
                 .select(Projections.constructor(StatsDto.class,
                         qHit.app,
                         qHit.uri,
-                        unique != null ? qHit.ip.countDistinct() : qHit.ip.count()))
+                        hitsExpression))
                 .from(qHit)
                 .where(predicate)
-                .groupBy(qHit.app, qHit.uri);
-
+                .groupBy(qHit.app, qHit.uri)
+                .orderBy(hitsExpression.desc());
 
         return jpqlQuery.fetch();
+    }
+
+    private LocalDateTime convertStringToLocalDateTime(String dateTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String decodedDateTime = URLDecoder.decode(dateTime, StandardCharsets.UTF_8);
+
+        try {
+            return LocalDateTime.parse(decodedDateTime, formatter);
+        } catch (DateTimeParseException e) {
+            throw new DateTimeValidationException("Некорректный формат времени: " + dateTime);
+        }
     }
 }
