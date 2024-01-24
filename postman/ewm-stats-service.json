@@ -495,12 +495,10 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8080/stats?start=2021-01-01+00%3A00%3A00&end=2021-02-01+00%3A00%A00",
-					"protocol": "http",
+                  "raw": "{{baseUrl}}/stats?start=2021-01-01+00%3A00%3A00&end=2021-02-01+00%3A00%A00",
 					"host": [
-						"localhost"
+                      "{{baseUrl}}"
 					],
-					"port": "8080",
 					"path": [
 						"stats"
 					],
@@ -1001,7 +999,7 @@
 	"variable": [
 		{
 			"key": "baseUrl",
-			"value": "http://localhost:8080"
+          "value": "http://localhost:9090"
 		}
 	]
 }
