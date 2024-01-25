@@ -1,15 +1,36 @@
-version: '3.1'
+version: '3.8'
 services:
-  stats-server:
+  stats-client:
+    build: ./stats-service/stats-client
+    image: ewm-stats-client
+    container_name: ewm-stats-client
     ports:
       - "9090:9090"
+    depends_on:
+      - stats-server
+    environment:
+      - EWM_SERVER_URL=http://stats-server:9091
+
+  stats-server:
+    build: ./stats-service/stats-server
+    image: stats-server
+    container_name: stats-server
+    ports:
+      - "9091:9091"
+    depends_on:
+      - stats-db
+    environment:
+      - SPRING_DATASOURCE_DRIVERCLASSNAME=org.postgresql.Driver
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/ewm
+      - SPRING_DATASOURCE_USERNAME=ewm
+      - SPRING_DATASOURCE_PASSWORD=ewm
 
   stats-db:
     image: postgres:14-alpine
-
-  ewm-service:
+    container_name: stats-db
     ports:
-      - "8080:8080"
-
-  ewm-db:
-    image: postgres:14-alpine
+      - "6541:5432"
+    environment:
+      - POSTGRES_PASSWORD=ewm
+      - POSTGRES_USER=ewm
+      - POSTGRES_DB=ewm
