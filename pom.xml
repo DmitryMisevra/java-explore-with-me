@@ -24,6 +24,7 @@
     </properties>
 
     <modules>
+        <module>main-service</module>
         <module>stats-service</module>
     </modules>
 
