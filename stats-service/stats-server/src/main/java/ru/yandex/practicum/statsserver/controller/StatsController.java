@@ -14,6 +14,7 @@ import ru.yandex.practicum.statsdto.hit.HitDto;
 import ru.yandex.practicum.statsdto.hit.StatsDto;
 import ru.yandex.practicum.statsserver.service.StatsService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j
@@ -31,7 +32,7 @@ public class StatsController {
      */
 
     @PostMapping("/hit")
-    public ResponseEntity<HitDto> createHit(@RequestBody CreatedHitDto createdHitDto) {
+    public ResponseEntity<HitDto> createHit(@Valid @RequestBody CreatedHitDto createdHitDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(statsService.createHit(createdHitDto));
     }
 

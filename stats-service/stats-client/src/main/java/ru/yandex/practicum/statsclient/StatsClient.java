@@ -1,4 +1,4 @@
-package ru.yandex.practicum.statsclient.client;
+package ru.yandex.practicum.statsclient;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -23,7 +23,7 @@ public class StatsClient {
 
     private final RestTemplate rest;
 
-    public StatsClient(@Value("${ewm-server.url}") String serverUrl, RestTemplateBuilder builder) {
+    public StatsClient(@Value("${ewm-stat-server.url}") String serverUrl, RestTemplateBuilder builder) {
         this.rest = builder
                 .uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl))
                 .requestFactory(HttpComponentsClientHttpRequestFactory::new)
