@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.mainservice.category.mapper.CategoryMapper;
 import ru.yandex.practicum.mainservice.event.dto.CreatedEventDto;
 import ru.yandex.practicum.mainservice.event.dto.EventDto;
+import ru.yandex.practicum.mainservice.event.dto.ShortEventDto;
 import ru.yandex.practicum.mainservice.event.dto.UpdatedEventDto;
 import ru.yandex.practicum.mainservice.event.model.Event;
 import ru.yandex.practicum.mainservice.user.mapper.UserMapper;
@@ -64,8 +65,8 @@ public class EventMapper {
                 .build();
     }
 
-    public EventDto eventToShortEventDto(Event event) {
-        return EventDto.builder()
+    public ShortEventDto eventToShortEventDto(Event event) {
+        return ShortEventDto.builder()
                 .annotation(event.getAnnotation())
                 .category(categoryMapper.categoryToCategoryDto(event.getCategory()))
                 .confirmedRequests(event.getConfirmedRequests())
