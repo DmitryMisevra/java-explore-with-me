@@ -10,6 +10,10 @@ import ru.yandex.practicum.mainservice.user.dto.UserDto;
 
 import java.time.LocalDateTime;
 
+
+/**
+ * ShortEventDto возвращается в http-ответах, когда требуется краткая информация о событии
+ */
 @Data
 @Builder
 @AllArgsConstructor

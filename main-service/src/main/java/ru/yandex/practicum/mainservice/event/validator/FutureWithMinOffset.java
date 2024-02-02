@@ -9,6 +9,9 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+/**
+ * Валидатор времени события
+ */
 @Target({FIELD})
 @Retention(RUNTIME)
 @Constraint(validatedBy = FutureWithMinOffsetValidator.class)

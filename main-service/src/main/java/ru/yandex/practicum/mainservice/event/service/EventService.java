@@ -2,13 +2,15 @@ package ru.yandex.practicum.mainservice.event.service;
 
 import ru.yandex.practicum.mainservice.event.dto.CreatedEventDto;
 import ru.yandex.practicum.mainservice.event.dto.EventDto;
+import ru.yandex.practicum.mainservice.event.dto.RequestStatusAggregateDto;
+import ru.yandex.practicum.mainservice.event.dto.RequestStatusUpdateDto;
 import ru.yandex.practicum.mainservice.event.dto.ShortEventDto;
 import ru.yandex.practicum.mainservice.event.dto.UpdatedEventDto;
+import ru.yandex.practicum.mainservice.request.dto.RequestDto;
 
 import java.util.List;
 
 public interface EventService {
-
 
     // private
     List<ShortEventDto> getEventListByInitiatorId(Long userId, Long from, Long size);
@@ -18,6 +20,12 @@ public interface EventService {
     EventDto getFullEventInfoByInitiator(Long userId, Long eventId);
 
     EventDto updateEventByInitiator(Long userId, Long eventId, UpdatedEventDto updatedEventDto);
+
+    List<RequestDto> getRequestListForUserEvent(Long userId, Long eventId);
+
+    RequestStatusAggregateDto updateRequestStatusByInitiator(Long userId,
+                                                             Long eventId,
+                                                             RequestStatusUpdateDto requestStatusUpdateDto);
 
 
     // admin
@@ -33,6 +41,4 @@ public interface EventService {
                                                        Boolean onlyAvailable, String sort, Long from, Long size);
 
     EventDto getPublishedEventInfoById(Long eventId);
-
-
 }

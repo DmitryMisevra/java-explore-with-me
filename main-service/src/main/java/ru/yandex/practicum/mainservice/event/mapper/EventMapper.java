@@ -9,6 +9,9 @@ import ru.yandex.practicum.mainservice.event.dto.UpdatedEventDto;
 import ru.yandex.practicum.mainservice.event.model.Event;
 import ru.yandex.practicum.mainservice.user.mapper.UserMapper;
 
+/**
+ * EventMapper для маппинга eventDto
+ */
 @Component
 @AllArgsConstructor
 public class EventMapper {
@@ -74,6 +77,4 @@ public class EventMapper {
                 .views(event.getViews())
                 .build();
     }
-
-
 }

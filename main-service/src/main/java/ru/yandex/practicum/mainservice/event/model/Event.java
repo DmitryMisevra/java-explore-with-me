@@ -23,6 +23,9 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import java.time.LocalDateTime;
 
+/**
+ * Базовая сущность Event
+ */
 @Entity
 @Table(name = "events")
 @Data
@@ -51,7 +54,7 @@ public class Event {
     @Column(name = "event_created", nullable = false)
     private LocalDateTime createdOn;
 
-    @Column(name = "event_annotation", nullable = false)
+    @Column(name = "event_description", nullable = false)
     private String description;
 
     @Column(name = "event_date", nullable = false)

@@ -13,6 +13,9 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
+/**
+ * CreatedEventDto передается при создании Event
+ */
 @Data
 @Builder
 @AllArgsConstructor

@@ -11,6 +11,9 @@ import ru.yandex.practicum.mainservice.user.dto.UserDto;
 
 import java.time.LocalDateTime;
 
+/**
+ * EventDto возвращается в http-ответах, когда требуется полная информация о событии
+ */
 @Data
 @Builder
 @AllArgsConstructor

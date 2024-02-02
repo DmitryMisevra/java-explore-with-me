@@ -13,6 +13,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * Базовая сущность Location
+ */
 @Entity
 @Table(name = "locations")
 @Data

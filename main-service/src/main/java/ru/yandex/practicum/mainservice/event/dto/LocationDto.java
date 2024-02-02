@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotNull;
 
 
+/**
+ * LocationDto возвращается как часть EventDto
+ */
 @Data
 @Builder
 @AllArgsConstructor
