@@ -12,6 +12,7 @@ import ru.yandex.practicum.mainservice.event.dto.EventDto;
 import ru.yandex.practicum.mainservice.event.dto.ShortEventDto;
 import ru.yandex.practicum.mainservice.event.service.EventService;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Min;
 import java.util.List;
 
@@ -47,10 +48,13 @@ public class PublicEventController {
             @RequestParam(required = false) Boolean onlyAvailable,
             @RequestParam(required = false) String sort,
             @RequestParam(defaultValue = "0") @Min(0) Long from,
-            @RequestParam(defaultValue = "10") @Min(1) Long size
+            @RequestParam(defaultValue = "10") @Min(1) Long size,
+            HttpServletRequest request
     ) {
         List<ShortEventDto> eventDtoList = eventService.getEventListByPublicParameters(text, categories, paid,
-                rangeStart, rangeEnd, onlyAvailable, sort, from, size);
+                rangeStart, rangeEnd, onlyAvailable, sort, from, size, request);
+        log.info("client ip: {}", request.getRemoteAddr());
+        log.info("endpoint path: {}", request.getRequestURI());
         log.debug("Получен список событий для public-просмотра {}", eventDtoList);
         return ResponseEntity.ok(eventDtoList);
     }
@@ -62,8 +66,11 @@ public class PublicEventController {
      * @return EventDto
      */
     @GetMapping(path = "/{eventId}")
-    ResponseEntity<EventDto> getPublishedEventInfoById(@PathVariable @Min(1) Long eventId) {
-        EventDto eventDto = eventService.getPublishedEventInfoById(eventId);
+    ResponseEntity<EventDto> getPublishedEventInfoById(@PathVariable @Min(1) Long eventId,
+                                                       HttpServletRequest request) {
+        EventDto eventDto = eventService.getPublishedEventInfoById(eventId, request);
+        log.info("client ip: {}", request.getRemoteAddr());
+        log.info("endpoint path: {}", request.getRequestURI());
         log.debug("Получена полная информация о событии {}", eventDto);
         return ResponseEntity.ok(eventDto);
     }

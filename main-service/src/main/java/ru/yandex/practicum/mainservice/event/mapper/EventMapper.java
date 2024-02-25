@@ -26,6 +26,7 @@ public class EventMapper {
                 .annotation(createdEventDto.getAnnotation())
                 .description(createdEventDto.getDescription())
                 .eventDate(createdEventDto.getEventDate())
+                .location(locationMapper.locationDtoToLocation(createdEventDto.getLocation()))
                 .paid(createdEventDto.getPaid())
                 .participantLimit(createdEventDto.getParticipantLimit())
                 .requestModeration(createdEventDto.getRequestModeration())

@@ -10,6 +10,8 @@ import ru.yandex.practicum.mainservice.user.model.User;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -87,6 +89,7 @@ public class Event {
     @Column(name = "event_title", nullable = false)
     private String title;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "event_state", nullable = false)
     private State state;
 
@@ -97,6 +100,33 @@ public class Event {
     protected void onCreate() {
         if (createdOn == null) {
             createdOn = LocalDateTime.now();
+        }
+        if (state == null) {
+            state = State.PENDING;
+        }
+    }
+
+    public void updateWith(Event eventToUpdate) {
+        if (eventToUpdate.getAnnotation() != null) {
+            this.annotation = eventToUpdate.getAnnotation();
+        }
+        if (eventToUpdate.getDescription() != null) {
+            this.description = eventToUpdate.getDescription();
+        }
+        if (eventToUpdate.getEventDate() != null) {
+            this.eventDate = eventToUpdate.getEventDate();
+        }
+        if (eventToUpdate.getPaid() != null) {
+            this.paid = eventToUpdate.getPaid();
+        }
+        if (eventToUpdate.participantLimit != null) {
+            this.participantLimit = eventToUpdate.getParticipantLimit();
+        }
+        if (eventToUpdate.requestModeration != null) {
+            this.requestModeration = eventToUpdate.getRequestModeration();
+        }
+        if (eventToUpdate.title != null) {
+            this.title = eventToUpdate.getTitle();
         }
     }
 }

@@ -1,6 +1,7 @@
 package ru.yandex.practicum.mainservice.event.dto;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -32,9 +33,10 @@ public class CreatedEventDto {
     private Long category;
 
     @NotBlank(message = "Не указано описание")
-    @Size(min = 20, message = "Размер описания должен быть не менее 20 символов")
+    @Size(min = 20, max = 7000, message = "Размер описания должен быть не менее 20 символов и не более 7000 символов")
     private String description;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @FutureWithMinOffset
     private LocalDateTime eventDate;
 
@@ -44,13 +46,14 @@ public class CreatedEventDto {
     @NotNull(message = "Не указано, платное событие или бесплатное")
     private Boolean paid;
 
-    @NotNull(message = "Не указан лимит на количество участников")
-    @Positive(message = "id категории должен быть положительным числом")
-    private Long participantLimit;
+    @Positive(message = "Лимит участников должен быть положительным числом")
+    @Builder.Default
+    private Long participantLimit = 0L;
 
     @NotNull(message = "Не указано, требуется ли модерация запросов на участие")
     private Boolean requestModeration;
 
     @NotBlank(message = "Не указан заголовок")
+    @Size(min = 3, max = 120, message = "Размер заголовка должен быть не менее 3 символов и не более 120 символов")
     private String title;
 }

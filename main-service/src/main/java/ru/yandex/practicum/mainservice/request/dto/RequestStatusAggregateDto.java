@@ -1,9 +1,8 @@
-package ru.yandex.practicum.mainservice.event.dto;
+package ru.yandex.practicum.mainservice.request.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Data;
-import ru.yandex.practicum.mainservice.request.dto.RequestDto;
 
 import java.util.List;
 
@@ -16,5 +15,5 @@ import java.util.List;
 public class RequestStatusAggregateDto {
 
     private List<RequestDto> confirmedRequests;
-    private List<RequestDto> rejectedRequests;
+    private List<RequestDto> deniedRequests;
 }

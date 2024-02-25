@@ -5,6 +5,9 @@ delete
 from compilations;
 
 delete
+from locations;
+
+delete
 from events;
 
 delete
@@ -12,9 +15,6 @@ from users;
 
 delete
 from requests;
-
-delete
-from locations;
 
 delete
 from categories;

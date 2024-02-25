@@ -1,25 +1,26 @@
 package ru.yandex.practicum.mainservice.request.dto;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.yandex.practicum.mainservice.request.model.RequestStatus;
 
-import java.time.LocalDateTime;
+import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
- * RequestDto передается и возвращается в http-запросах и ответах
+ * RequestStatusUpdateDto передается при обновлении статуса заявок
  */
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RequestDto {
+public class RequestStatusUpdateDto {
 
-    private LocalDateTime created;
-    private Long event;
-    private Long id;
-    private Long requester;
+    private List<Integer> requestIds;
+
+    @NotNull
     private RequestStatus status;
 }

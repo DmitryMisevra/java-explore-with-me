@@ -14,12 +14,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.yandex.practicum.mainservice.event.dto.CreatedEventDto;
 import ru.yandex.practicum.mainservice.event.dto.EventDto;
-import ru.yandex.practicum.mainservice.event.dto.RequestStatusAggregateDto;
-import ru.yandex.practicum.mainservice.event.dto.RequestStatusUpdateDto;
 import ru.yandex.practicum.mainservice.event.dto.ShortEventDto;
 import ru.yandex.practicum.mainservice.event.dto.UpdatedEventDto;
 import ru.yandex.practicum.mainservice.event.service.EventService;
 import ru.yandex.practicum.mainservice.request.dto.RequestDto;
+import ru.yandex.practicum.mainservice.request.dto.RequestStatusAggregateDto;
+import ru.yandex.practicum.mainservice.request.dto.RequestStatusUpdateDto;
+import ru.yandex.practicum.mainservice.request.service.RequestService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
@@ -32,6 +33,7 @@ import java.util.List;
 public class PrivateEventController {
 
     private final EventService eventService;
+    private final RequestService requestService;
 
     /**
      * Получить список событий, созданных пользователем
@@ -109,7 +111,7 @@ public class PrivateEventController {
     @GetMapping(path = "/{eventId}/requests")
     ResponseEntity<List<RequestDto>> getRequestListForUserEvent(@PathVariable @Min(1) Long userId,
                                                                 @PathVariable @Min(1) Long eventId) {
-        List<RequestDto> requestDtoList = eventService.getRequestListForUserEvent(userId, eventId);
+        List<RequestDto> requestDtoList = requestService.getRequestListForUserEvent(userId, eventId);
         log.debug("Получен список запросов для запрашиваемого события {}", requestDtoList);
         return ResponseEntity.ok(requestDtoList);
     }
@@ -127,7 +129,7 @@ public class PrivateEventController {
                                                                              @PathVariable @Min(1) Long eventId,
                                                                              @Valid @RequestBody RequestStatusUpdateDto
                                                                                      requestStatusUpdateDto) {
-        RequestStatusAggregateDto requestStatusAggregateDto = eventService.updateRequestStatusByInitiator(userId,
+        RequestStatusAggregateDto requestStatusAggregateDto = requestService.updateRequestStatusByInitiator(userId,
                 eventId, requestStatusUpdateDto);
         log.debug("Обновлены статусы запросов на участие: {}", requestStatusAggregateDto);
         return ResponseEntity.ok(requestStatusAggregateDto);

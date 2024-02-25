@@ -5,16 +5,24 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ReflectionUtils;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import ru.yandex.practicum.mainservice.event.dto.CreatedEventDto;
+import ru.yandex.practicum.mainservice.event.validator.FutureWithMinOffset;
 import ru.yandex.practicum.mainservice.exceptions.EmailAlreadyExistsException;
+import ru.yandex.practicum.mainservice.exceptions.InvalidStateException;
 import ru.yandex.practicum.mainservice.exceptions.NotFoundException;
+import ru.yandex.practicum.mainservice.exceptions.WrongInitiatorException;
 
+import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -26,21 +34,30 @@ public class ErrorHandler extends ResponseEntityExceptionHandler {
                                                                   HttpHeaders headers,
                                                                   HttpStatus status,
                                                                   WebRequest request) {
+        HttpStatus responseStatus = HttpStatus.BAD_REQUEST;
         String errorMessage = ex.getBindingResult().getAllErrors().get(0).getDefaultMessage();
 
+        for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {
+            Field field = ReflectionUtils.findField(CreatedEventDto.class, fieldError.getField());
+            if (field != null && field.isAnnotationPresent(FutureWithMinOffset.class)) {
+                responseStatus = HttpStatus.CONFLICT;
+                break;
+            }
+        }
+
         ErrorResponse errorResponse = ErrorResponse.builder()
-                .status(HttpStatus.BAD_REQUEST.name())
+                .status(responseStatus.name())
                 .errorType(ex.getClass().getSimpleName())
                 .reason("Incorrectly made request.")
                 .message(errorMessage)
                 .timestamp(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
                 .build();
 
-        return new ResponseEntity<>(errorResponse, headers, status);
+        return new ResponseEntity<>(errorResponse, headers, responseStatus);
     }
 
     @ExceptionHandler({IllegalStateException.class, IllegalArgumentException.class,
-            MissingRequestHeaderException.class})
+            MissingRequestHeaderException.class, WrongInitiatorException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse validationException(final RuntimeException e) {
         return ErrorResponse.builder()
@@ -64,9 +81,10 @@ public class ErrorHandler extends ResponseEntityExceptionHandler {
                 .build();
     }
 
-    @ExceptionHandler({EmailAlreadyExistsException.class, DataIntegrityViolationException.class})
+    @ExceptionHandler({EmailAlreadyExistsException.class, DataIntegrityViolationException.class,
+            InvalidStateException.class})
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse emailAlreadyExistsException(final RuntimeException e) {
+    public ErrorResponse handleConflictException(final RuntimeException e) {
         return ErrorResponse.builder()
                 .status(HttpStatus.CONFLICT.name())
                 .errorType(e.getClass().getSimpleName())
@@ -86,5 +104,18 @@ public class ErrorHandler extends ResponseEntityExceptionHandler {
                 .message(e.getMessage())
                 .timestamp(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
                 .build();
+    }
+
+    @ExceptionHandler(HttpStatusCodeException.class)
+    public ResponseEntity<ErrorResponse> handleHttpStatusCodeException(HttpStatusCodeException e) {
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .status(e.getStatusCode().toString())
+                .errorType(e.getClass().getSimpleName())
+                .reason("Incorrectly made request for stats.")
+                .message(e.getResponseBodyAsString())
+                .timestamp(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .build();
+
+        return new ResponseEntity<>(errorResponse, e.getStatusCode());
     }
 }

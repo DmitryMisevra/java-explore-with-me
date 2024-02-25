@@ -15,6 +15,7 @@ public class RequestMapper {
                 .created(request.getCreated())
                 .event(request.getEvent())
                 .id(request.getId())
+                .requester(request.getRequester())
                 .status(request.getStatus())
                 .build();
     }

@@ -18,8 +18,6 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class LocationDto {
 
-    private Long id;
-
     @NotNull(message = "Не указана широта координат")
     private Float lat;
 

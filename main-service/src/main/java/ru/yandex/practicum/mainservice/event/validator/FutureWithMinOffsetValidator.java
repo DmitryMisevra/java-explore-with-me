@@ -8,7 +8,6 @@ import java.time.temporal.ChronoUnit;
 public class FutureWithMinOffsetValidator implements ConstraintValidator<FutureWithMinOffset, LocalDateTime> {
     @Override
     public void initialize(FutureWithMinOffset constraintAnnotation) {
-        // Инициализация не требуется, поскольку интервал фиксирован
     }
 
     @Override
@@ -19,5 +18,4 @@ public class FutureWithMinOffsetValidator implements ConstraintValidator<FutureW
         LocalDateTime now = LocalDateTime.now();
         return value.isAfter(now) && ChronoUnit.HOURS.between(now, value) >= 2;
     }
-
 }
