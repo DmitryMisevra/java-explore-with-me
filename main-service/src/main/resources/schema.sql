@@ -1,23 +1,23 @@
-delete
-from compilations_events_collation;
-
-delete
-from compilations;
-
-delete
-from locations;
-
-delete
-from events;
-
-delete
-from users;
-
-delete
-from requests;
-
-delete
-from categories;
+-- delete
+-- from compilations_events_collation;
+--
+-- delete
+-- from compilations;
+--
+-- delete
+-- from locations;
+--
+-- delete
+-- from events;
+--
+-- delete
+-- from users;
+--
+-- delete
+-- from requests;
+--
+-- delete
+-- from categories;
 
 alter table compilations
     alter column compilation_id restart with 1;
