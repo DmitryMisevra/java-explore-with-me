@@ -1,38 +1,38 @@
-delete
-from compilations_events_collation;
-
-delete
-from compilations;
-
-delete
-from locations;
-
-delete
-from events;
-
-delete
-from users;
-
-delete
-from requests;
-
-delete
-from categories;
-
-alter table compilations
-    alter column compilation_id restart with 1;
-
-alter table users
-    alter column user_id restart with 1;
-
-alter table categories
-    alter column category_id restart with 1;
-
-alter table events
-    alter column event_id restart with 1;
-
-alter table requests
-    alter column request_id restart with 1;
+-- delete
+-- from compilations_events_collation;
+--
+-- delete
+-- from compilations;
+--
+-- delete
+-- from locations;
+--
+-- delete
+-- from events;
+--
+-- delete
+-- from users;
+--
+-- delete
+-- from requests;
+--
+-- delete
+-- from categories;
+--
+-- alter table compilations
+--     alter column compilation_id restart with 1;
+--
+-- alter table users
+--     alter column user_id restart with 1;
+--
+-- alter table categories
+--     alter column category_id restart with 1;
+--
+-- alter table events
+--     alter column event_id restart with 1;
+--
+-- alter table requests
+--     alter column request_id restart with 1;
 
 
 create table if not exists public.users
@@ -138,8 +138,6 @@ alter table public.compilations
 create table if not exists public.compilations_events_collation
 (
     compilation_id integer not null
-        constraint compilations_events_collation_pk
-            primary key
         constraint compilations_events_collation_compilations_compilation_id_fk
             references public.compilations
             on delete cascade,

@@ -60,8 +60,10 @@ public class AdminCompilationController {
      * @return CompilationDto
      */
     @PatchMapping(path = "{compId}")
-    ResponseEntity<CompilationDto> updateCompilationById(@PathVariable @Min(1) Long compId) {
-        CompilationDto compilationDto = compilationService.updateCompilationById(compId);
+    ResponseEntity<CompilationDto> updateCompilationById(@PathVariable @Min(1) Long compId,
+                                                         @Valid @RequestBody CreatedCompilationDto createdCompilationDto
+    ) {
+        CompilationDto compilationDto = compilationService.updateCompilationById(compId, createdCompilationDto);
         log.debug("Подборка c id {} обновлена: {}", compId, compilationDto);
         return ResponseEntity.ok(compilationDto);
     }

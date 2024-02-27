@@ -23,8 +23,8 @@ public class CreatedCompilationDto {
     @NotNull(message = "не передан список событий для подборки")
     private List<Long> events;
 
-    @NotNull(message = "не указано, должна ли подборка быть на главной странице")
-    private Boolean pinned;
+    @Builder.Default
+    private Boolean pinned = false;
 
     @NotBlank(message = "Не указан заголовок подборки")
     @Size(max = 50, message = "Размер заголовка подборки должен быть не более 50 символов")

@@ -1,8 +1,8 @@
-delete
-from hits;
-
-alter table hits
-    alter column hit_id restart with 1;
+-- delete
+-- from hits;
+--
+-- alter table hits
+--     alter column hit_id restart with 1;
 
 
 create table if not exists hits

@@ -5,10 +5,12 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingRequestHeaderException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -44,7 +46,43 @@ public class ErrorHandler extends ResponseEntityExceptionHandler {
                 break;
             }
         }
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .status(responseStatus.name())
+                .errorType(ex.getClass().getSimpleName())
+                .reason("Incorrectly made request.")
+                .message(errorMessage)
+                .timestamp(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .build();
 
+        return new ResponseEntity<>(errorResponse, headers, responseStatus);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleMissingServletRequestParameter(
+            MissingServletRequestParameterException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+
+        HttpStatus responseStatus = HttpStatus.BAD_REQUEST;
+        String errorMessage = ex.getParameterName() + " parameter is missing";
+
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .status(responseStatus.name())
+                .errorType(ex.getClass().getSimpleName())
+                .reason("Incorrectly made request.")
+                .message(errorMessage)
+                .timestamp(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .build();
+
+        return new ResponseEntity<>(errorResponse, headers, responseStatus);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
+                                                                  HttpHeaders headers,
+                                                                  HttpStatus status,
+                                                                  WebRequest request) {
+
+        HttpStatus responseStatus = HttpStatus.BAD_REQUEST;
+        String errorMessage = ex.getLocalizedMessage();
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .status(responseStatus.name())
                 .errorType(ex.getClass().getSimpleName())

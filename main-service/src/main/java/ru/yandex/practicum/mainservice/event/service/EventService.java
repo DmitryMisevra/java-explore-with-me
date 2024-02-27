@@ -4,6 +4,7 @@ import ru.yandex.practicum.mainservice.event.dto.CreatedEventDto;
 import ru.yandex.practicum.mainservice.event.dto.EventDto;
 import ru.yandex.practicum.mainservice.event.dto.ShortEventDto;
 import ru.yandex.practicum.mainservice.event.dto.UpdatedEventDto;
+import ru.yandex.practicum.mainservice.event.model.Event;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -30,4 +31,6 @@ public interface EventService {
                                                        HttpServletRequest request);
 
     EventDto getPublishedEventInfoById(Long eventId, HttpServletRequest request);
+
+    Event setViewsAndConfirmedRequests(Event event);
 }

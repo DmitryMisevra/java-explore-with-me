@@ -77,8 +77,7 @@ public class EventServiceImpl implements EventService {
 
         return eventList.stream()
                 .map(event -> {
-                    event.setConfirmedRequests(getConfirmedRequests(event.getId()));
-                    event.setViews(getViews(event));
+                    setViewsAndConfirmedRequests(event);
                     return eventMapper.eventToShortEventDto(event);
                 })
                 .collect(Collectors.toList());
@@ -102,8 +101,7 @@ public class EventServiceImpl implements EventService {
         Location location = locationMapper.locationDtoToLocation(createdEventDto.getLocation());
         location.setId(savedEvent.getId());
         locationRepository.save(location);
-        savedEvent.setViews(getViews(savedEvent));
-        savedEvent.setConfirmedRequests(getConfirmedRequests(savedEvent.getId()));
+        setViewsAndConfirmedRequests(savedEvent);
 
         return eventMapper.eventToEventDto(savedEvent);
     }
@@ -124,8 +122,7 @@ public class EventServiceImpl implements EventService {
         Location location = locationRepository.findById(event.getId()).orElseThrow(() ->
                 new NotFoundException("Координаты для события с id: " + eventId + " не найдены"));
         event.setLocation(location);
-        event.setConfirmedRequests(getConfirmedRequests(eventId));
-        event.setViews(getViews(event));
+        setViewsAndConfirmedRequests(event);
 
         return eventMapper.eventToEventDto(event);
     }
@@ -159,8 +156,7 @@ public class EventServiceImpl implements EventService {
         }
 
         Event updatedEvent = eventRepository.save(event);
-        updatedEvent.setConfirmedRequests(getConfirmedRequests(updatedEvent.getId()));
-        updatedEvent.setViews(getViews(updatedEvent));
+        setViewsAndConfirmedRequests(updatedEvent);
 
         if (updatedEventDto.getLocation() != null) {
             Location updatedLocation = locationMapper.locationDtoToLocation(updatedEventDto.getLocation());
@@ -217,8 +213,7 @@ public class EventServiceImpl implements EventService {
                     Location location = locationRepository.findById(event.getId()).orElseThrow(() ->
                             new NotFoundException("Координаты для события с id: " + event.getId() + " не найдены"));
                     event.setLocation(location);
-                    event.setConfirmedRequests(getConfirmedRequests(event.getId()));
-                    event.setViews(getViews(event));
+                    setViewsAndConfirmedRequests(event);
                     return eventMapper.eventToEventDto(event);
                 })
                 .collect(Collectors.toList());
@@ -257,8 +252,7 @@ public class EventServiceImpl implements EventService {
         }
 
         Event updatedEvent = eventRepository.save(event);
-        updatedEvent.setConfirmedRequests(getConfirmedRequests(updatedEvent.getId()));
-        updatedEvent.setViews(getViews(updatedEvent));
+        setViewsAndConfirmedRequests(updatedEvent);
 
         if (updatedEventDto.getLocation() != null) {
             Location updatedLocation = locationMapper.locationDtoToLocation(updatedEventDto.getLocation());
@@ -329,8 +323,7 @@ public class EventServiceImpl implements EventService {
                             confirmedRequests >= event.getParticipantLimit()) {
                         return null;
                     } else {
-                        event.setConfirmedRequests(confirmedRequests);
-                        event.setViews(getViews(event));
+                        setViewsAndConfirmedRequests(event);
                         return eventMapper.eventToShortEventDto(event);
                     }
                 })
@@ -360,12 +353,18 @@ public class EventServiceImpl implements EventService {
         Location location = locationRepository.findById(event.getId()).orElseThrow(() ->
                 new NotFoundException("Координаты для события с id: " + eventId + " не найдены"));
         event.setLocation(location);
-        event.setConfirmedRequests(getConfirmedRequests(eventId));
-        event.setViews(getViews(event));
+        setViewsAndConfirmedRequests(event);
 
         saveHit(request);
 
         return eventMapper.eventToEventDto(event);
+    }
+
+    @Override
+    public Event setViewsAndConfirmedRequests(Event event) {
+        event.setConfirmedRequests(getConfirmedRequests(event.getId()));
+        event.setViews(getViews(event));
+        return event;
     }
 
 

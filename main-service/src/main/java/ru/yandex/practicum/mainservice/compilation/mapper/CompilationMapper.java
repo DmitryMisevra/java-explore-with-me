@@ -27,6 +27,7 @@ public class CompilationMapper {
 
     public CompilationDto CompilationToCompilationDto(Compilation compilation) {
         return CompilationDto.builder()
+                .id(compilation.getId())
                 .events(compilation.getEvents().stream()
                         .map(eventMapper::eventToShortEventDto)
                         .collect(Collectors.toList()))

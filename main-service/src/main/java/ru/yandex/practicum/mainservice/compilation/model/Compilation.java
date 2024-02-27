@@ -47,4 +47,13 @@ public class Compilation {
 
     @Column(name = "compilation_title", nullable = false)
     private String title;
+
+    public void updateWith(Compilation compilationToUpdate) {
+        if (compilationToUpdate.getPinned() != null) {
+            this.pinned = compilationToUpdate.getPinned();
+        }
+        if (compilationToUpdate.getTitle() != null) {
+            this.title = compilationToUpdate.getTitle();
+        }
+    }
 }
