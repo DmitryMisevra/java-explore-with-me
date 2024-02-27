@@ -20,6 +20,6 @@ public class CreatedUserDto {
     private String name;
     @NotBlank(message = "не указан Email")
     @Email(message = "неправильный формат Email")
-    @Size(max = 255, message = "почта не может быть более 255 символов")
+    @Size(min = 6, max = 254, message = "Почта должна быть длиной от 6 до 254 символов")
     private String email;
 }

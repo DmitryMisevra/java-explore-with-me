@@ -86,7 +86,7 @@ public class CompilationServiceImpl implements CompilationService {
 
         Compilation compilationToSave = compilationMapper.CompilationDtoToCompilation(createdCompilationDto);
         List<Long> eventIds = createdCompilationDto.getEvents();
-        if (eventIds != null && !eventIds.isEmpty()) {
+        if (eventIds != null) {
             List<Event> eventList = eventRepository.findAllById(eventIds);
             compilationToSave.setEvents(eventList);
         }

@@ -3,6 +3,7 @@ package ru.yandex.practicum.mainservice.user.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,7 +41,7 @@ public class UserController {
     ResponseEntity<UserDto> createUser(@Valid @RequestBody CreatedUserDto createdUserDto) {
         UserDto createdUser = userService.createUser(createdUserDto);
         log.debug("Добавлен новый пользователь с id={}", createdUser.getId());
-        return ResponseEntity.ok(createdUser);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
 
     /**

@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.yandex.practicum.mainservice.event.validator.FutureWithMinOffset;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
@@ -46,7 +47,7 @@ public class CreatedEventDto {
     @NotNull(message = "Не указано, платное событие или бесплатное")
     private Boolean paid;
 
-    @Positive(message = "Лимит участников должен быть положительным числом")
+    @Min(value = 0, message = "Лимит участников должен быть равен 0 или больше")
     @Builder.Default
     private Long participantLimit = 0L;
 

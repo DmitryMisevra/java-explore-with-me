@@ -27,7 +27,7 @@ public class UpdatedEventDto {
     @Positive(message = "id категории должен быть положительным числом")
     private Long category;
 
-    @Size(min = 20, message = "Размер описания должен быть не менее 20 символов")
+    @Size(min = 20, max = 7000, message = "Размер описания должен быть не менее 20 символов и не более 7000 символов")
     private String description;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
@@ -36,6 +36,8 @@ public class UpdatedEventDto {
 
     private LocationDto location;
     private Boolean paid;
+
+    @Positive(message = "Лимит участников должен быть положительным числом")
     private Long participantLimit;
     private Boolean requestModeration;
     private StateAction stateAction;

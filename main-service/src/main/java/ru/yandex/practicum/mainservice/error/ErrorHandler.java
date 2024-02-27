@@ -6,8 +6,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.util.ReflectionUtils;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -17,14 +15,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import ru.yandex.practicum.mainservice.event.dto.CreatedEventDto;
-import ru.yandex.practicum.mainservice.event.validator.FutureWithMinOffset;
 import ru.yandex.practicum.mainservice.exceptions.EmailAlreadyExistsException;
 import ru.yandex.practicum.mainservice.exceptions.InvalidStateException;
 import ru.yandex.practicum.mainservice.exceptions.NotFoundException;
 import ru.yandex.practicum.mainservice.exceptions.WrongInitiatorException;
 
-import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -39,13 +34,6 @@ public class ErrorHandler extends ResponseEntityExceptionHandler {
         HttpStatus responseStatus = HttpStatus.BAD_REQUEST;
         String errorMessage = ex.getBindingResult().getAllErrors().get(0).getDefaultMessage();
 
-        for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {
-            Field field = ReflectionUtils.findField(CreatedEventDto.class, fieldError.getField());
-            if (field != null && field.isAnnotationPresent(FutureWithMinOffset.class)) {
-                responseStatus = HttpStatus.CONFLICT;
-                break;
-            }
-        }
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .status(responseStatus.name())
                 .errorType(ex.getClass().getSimpleName())

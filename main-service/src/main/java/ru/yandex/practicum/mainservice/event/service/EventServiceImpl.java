@@ -21,6 +21,7 @@ import ru.yandex.practicum.mainservice.event.model.QEvent;
 import ru.yandex.practicum.mainservice.event.model.State;
 import ru.yandex.practicum.mainservice.event.repository.EventRepository;
 import ru.yandex.practicum.mainservice.event.repository.LocationRepository;
+import ru.yandex.practicum.mainservice.exceptions.DateTimeValidationException;
 import ru.yandex.practicum.mainservice.exceptions.InvalidStateException;
 import ru.yandex.practicum.mainservice.exceptions.NotFoundException;
 import ru.yandex.practicum.mainservice.exceptions.WrongInitiatorException;
@@ -34,10 +35,12 @@ import ru.yandex.practicum.statsdto.hit.StatsDto;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.servlet.http.HttpServletRequest;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -155,6 +158,27 @@ public class EventServiceImpl implements EventService {
             event.setCategory(category);
         }
 
+        if (updatedEventDto.getStateAction() != null) {
+            switch (updatedEventDto.getStateAction()) {
+                case CANCEL_REVIEW:
+                    if (!event.getState().equals(State.PENDING)) {
+                        throw new InvalidStateException("Отклонять можно только события в статусе " +
+                                "ожидания");
+                    }
+                    event.setState(State.CANCELED);
+                    break;
+                case SEND_TO_REVIEW:
+                    if (!event.getState().equals(State.CANCELED)) {
+                        throw new InvalidStateException("Отправлять на ревью можно только отмененные события");
+                    }
+                    event.setState(State.PENDING);
+                    break;
+                default:
+                    throw new InvalidStateException("Некорректный запрос на изменение статусв: "
+                            + updatedEventDto.getStateAction());
+            }
+        }
+
         Event updatedEvent = eventRepository.save(event);
         setViewsAndConfirmedRequests(updatedEvent);
 
@@ -193,12 +217,12 @@ public class EventServiceImpl implements EventService {
         }
 
         if (rangeStart != null) {
-            LocalDateTime startDateTime = LocalDateTime.parse(rangeStart);
+            LocalDateTime startDateTime = decodeDateTime(rangeStart);
             condition = condition.and(qEvent.eventDate.after(startDateTime));
         }
 
         if (rangeEnd != null) {
-            LocalDateTime endDateTime = LocalDateTime.parse(rangeEnd);
+            LocalDateTime endDateTime = decodeDateTime(rangeEnd);
             condition = condition.and(qEvent.eventDate.before(endDateTime));
         }
 
@@ -248,6 +272,9 @@ public class EventServiceImpl implements EventService {
                 case REJECT_EVENT:
                     event.setState(State.CANCELED);
                     break;
+                default:
+                    throw new InvalidStateException("Некорректный запрос на изменение статусв: "
+                            + updatedEventDto.getStateAction());
             }
         }
 
@@ -292,12 +319,12 @@ public class EventServiceImpl implements EventService {
         }
 
         if (rangeStart != null) {
-            LocalDateTime startDateTime = LocalDateTime.parse(rangeStart);
+            LocalDateTime startDateTime = decodeDateTime(rangeStart);
             condition = condition.and(qEvent.eventDate.after(startDateTime));
         }
 
         if (rangeEnd != null) {
-            LocalDateTime endDateTime = LocalDateTime.parse(rangeEnd);
+            LocalDateTime endDateTime = decodeDateTime(rangeEnd);
             condition = condition.and(qEvent.eventDate.before(endDateTime));
         }
 
@@ -374,7 +401,7 @@ public class EventServiceImpl implements EventService {
         String expectedUri = "/events/" + event.getId();
         String[] uriArray = {expectedUri};
 
-        ResponseEntity<List<StatsDto>> response = statsClient.getStats(start, end, uriArray, false);
+        ResponseEntity<List<StatsDto>> response = statsClient.getStats(start, end, uriArray, true);
 
         if (response.getBody() == null || response.getBody().size() != 1) {
             return 0L;
@@ -392,6 +419,17 @@ public class EventServiceImpl implements EventService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String stringDateTime = dateTime.format(formatter);
         return URLEncoder.encode(stringDateTime, StandardCharsets.UTF_8);
+    }
+
+    private LocalDateTime decodeDateTime(String dateTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String decodedDateTime = URLDecoder.decode(dateTime, StandardCharsets.UTF_8);
+
+        try {
+            return LocalDateTime.parse(decodedDateTime, formatter);
+        } catch (DateTimeParseException e) {
+            throw new DateTimeValidationException("Некорректный формат времени: " + dateTime);
+        }
     }
 
     private Long getConfirmedRequests(Long eventId) {
