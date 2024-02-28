@@ -192,7 +192,7 @@ public class RequestServiceImpl implements RequestService {
             }
 
             if (isParticipantLimitIsFull(event)) {
-                status = RequestStatus.CANCELED;
+                status = RequestStatus.REJECTED;
             }
         }
 
