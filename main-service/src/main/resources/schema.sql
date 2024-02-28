@@ -18,7 +18,7 @@
 --
 -- delete
 -- from categories;
-
+--
 -- alter table compilations
 --     alter column compilation_id restart with 1;
 --

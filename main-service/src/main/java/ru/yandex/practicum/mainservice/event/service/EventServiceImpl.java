@@ -199,6 +199,11 @@ public class EventServiceImpl implements EventService {
     @Transactional
     public List<EventDto> getEventListByAdminParameters(Integer[] userIds, String[] states, Integer[] categories,
                                                         String rangeStart, String rangeEnd, Long from, Long size) {
+
+        if (rangeStart != null && rangeEnd != null) {
+            checkDates(rangeStart, rangeEnd);
+        }
+
         QEvent qEvent = QEvent.event;
         JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
 
@@ -299,6 +304,11 @@ public class EventServiceImpl implements EventService {
                                                               String rangeStart, String rangeEnd, Boolean onlyAvailable,
                                                               String sort, Long from, Long size,
                                                               HttpServletRequest request) {
+
+        if (rangeStart != null && rangeEnd != null) {
+            checkDates(rangeStart, rangeEnd);
+        }
+
         QEvent qEvent = QEvent.event;
         JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
 
@@ -429,6 +439,16 @@ public class EventServiceImpl implements EventService {
             return LocalDateTime.parse(decodedDateTime, formatter);
         } catch (DateTimeParseException e) {
             throw new DateTimeValidationException("Некорректный формат времени: " + dateTime);
+        }
+    }
+
+    private void checkDates(String rangeStart, String rangeEnd) {
+        LocalDateTime startDateTime = decodeDateTime(rangeStart);
+        LocalDateTime endDateTime = decodeDateTime(rangeEnd);
+
+        if (startDateTime.isAfter(endDateTime)) {
+            throw new IllegalArgumentException("Время начала диапазона поиска " + startDateTime + " не может быть " +
+                    "позже времени конца диапазона поиска " + endDateTime);
         }
     }
 

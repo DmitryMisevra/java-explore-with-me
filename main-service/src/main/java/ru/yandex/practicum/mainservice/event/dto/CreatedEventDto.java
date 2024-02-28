@@ -44,15 +44,15 @@ public class CreatedEventDto {
     @NotNull(message = "Не указаны координаты события")
     private LocationDto location;
 
-    @NotNull(message = "Не указано, платное событие или бесплатное")
-    private Boolean paid;
+    @Builder.Default
+    private Boolean paid = false;
 
     @Min(value = 0, message = "Лимит участников должен быть равен 0 или больше")
     @Builder.Default
     private Long participantLimit = 0L;
 
-    @NotNull(message = "Не указано, требуется ли модерация запросов на участие")
-    private Boolean requestModeration;
+    @Builder.Default
+    private Boolean requestModeration = true;
 
     @NotBlank(message = "Не указан заголовок")
     @Size(min = 3, max = 120, message = "Размер заголовка должен быть не менее 3 символов и не более 120 символов")

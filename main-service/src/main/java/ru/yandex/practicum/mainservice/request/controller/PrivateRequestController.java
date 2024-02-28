@@ -65,6 +65,6 @@ public class PrivateRequestController {
                                              @PathVariable @Min(1) Long requestId) {
         RequestDto canceledRequestDto = requestService.cancelRequest(userId, requestId);
         log.debug("Отменен запрос на участие: {}", canceledRequestDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(canceledRequestDto);
+        return ResponseEntity.ok(canceledRequestDto);
     }
 }

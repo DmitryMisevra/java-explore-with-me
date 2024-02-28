@@ -7,6 +7,8 @@ import ru.yandex.practicum.mainservice.compilation.dto.CreatedCompilationDto;
 import ru.yandex.practicum.mainservice.compilation.model.Compilation;
 import ru.yandex.practicum.mainservice.event.mapper.EventMapper;
 
+import java.util.Collections;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -28,7 +30,9 @@ public class CompilationMapper {
     public CompilationDto CompilationToCompilationDto(Compilation compilation) {
         return CompilationDto.builder()
                 .id(compilation.getId())
-                .events(compilation.getEvents().stream()
+                .events(Optional.ofNullable(compilation.getEvents())
+                        .orElseGet(Collections::emptyList) // Возвращает пустой список, если getEvents() == null
+                        .stream()
                         .map(eventMapper::eventToShortEventDto)
                         .collect(Collectors.toList()))
                 .pinned(compilation.getPinned())

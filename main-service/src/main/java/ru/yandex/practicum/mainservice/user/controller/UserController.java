@@ -83,6 +83,6 @@ public class UserController {
         }
         userService.deleteUserById(id);
         log.debug("Пользователь с id={} удален", id);
-        return ResponseEntity.ok("Пользователь с id: " + id + " успешно удален");
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Пользователь с id: " + id + " успешно удален");
     }
 }

@@ -68,12 +68,12 @@ public class RequestServiceImpl implements RequestService {
         Event event = eventRepository.findById(eventId).orElseThrow(() ->
                 new NotFoundException("Событие с id: " + eventId + " не найдено"));
 
-        if (ifRequestIsDublicated(userId, eventId)) {
+        if (isRequestIsDublicated(userId, eventId)) {
             throw new InvalidStateException("Запрос на участие в событии с id: " + eventId + " уже добавлен" +
                     " пользователем c id: " + userId + " ранее");
         }
 
-        if (ifParticipantLimitIsFull(event)) {
+        if (isParticipantLimitIsFull(event)) {
             throw new InvalidStateException("Лимит на количество запросов в событии с id: " + eventId + " уже " +
                     "исчерпан");
         }
@@ -91,10 +91,10 @@ public class RequestServiceImpl implements RequestService {
                 .event(event.getId())
                 .build();
 
-        if (event.getRequestModeration()) {
-            request.setStatus(RequestStatus.PENDING);
-        } else {
+        if (!event.getRequestModeration() || event.getParticipantLimit() == 0) {
             request.setStatus(RequestStatus.CONFIRMED);
+        } else {
+            request.setStatus(RequestStatus.PENDING);
         }
 
         Request savedRequest = requestRepository.save(request);
@@ -111,7 +111,9 @@ public class RequestServiceImpl implements RequestService {
             throw new NotFoundException("Запрос с id: " + userId + " не найден");
         }
 
-        requestRepository.deleteById(requestId);
+        request.setStatus(RequestStatus.CANCELED);
+        requestRepository.save(request);
+
         return requestMapper.requestToRequestDto(request);
     }
 
@@ -177,10 +179,8 @@ public class RequestServiceImpl implements RequestService {
                 throw new InvalidStateException("Заявка c id: " + requestId + " не находится в статусе PENDING");
             }
 
-            if (ifParticipantLimitIsFull(event)) {
-                request.setStatus(RequestStatus.REJECTED);
-                requestRepository.save(request);
-                deniedRequests.add(requestMapper.requestToRequestDto(request));
+            if (isParticipantLimitIsFull(event)) {
+                throw new InvalidStateException("Для события c id: " + eventId + " уже достигнут лимит заявок");
             }
             request.setStatus(status);
             requestRepository.save(request);
@@ -189,6 +189,10 @@ public class RequestServiceImpl implements RequestService {
                 confirmedRequests.add(requestMapper.requestToRequestDto(request));
             } else {
                 deniedRequests.add(requestMapper.requestToRequestDto(request));
+            }
+
+            if (isParticipantLimitIsFull(event)) {
+                status = RequestStatus.CANCELED;
             }
         }
 
@@ -199,7 +203,7 @@ public class RequestServiceImpl implements RequestService {
 
     }
 
-    private boolean ifRequestIsDublicated(Long userId, Long eventId) {
+    private boolean isRequestIsDublicated(Long userId, Long eventId) {
         JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
         QRequest qRequest = QRequest.request;
 
@@ -212,7 +216,7 @@ public class RequestServiceImpl implements RequestService {
         return count > 0;
     }
 
-    private boolean ifParticipantLimitIsFull(Event event) {
+    private boolean isParticipantLimitIsFull(Event event) {
         if (event.getParticipantLimit() == 0) {
             return false;
         }

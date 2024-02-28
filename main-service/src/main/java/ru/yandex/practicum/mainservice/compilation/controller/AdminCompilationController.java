@@ -50,7 +50,7 @@ public class AdminCompilationController {
     ResponseEntity<String> deleteCompilationById(@PathVariable @Min(1) Long compId) {
         compilationService.deleteCompilationById(compId);
         log.debug("Подборка c id {} удалена", compId);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Подборка с id: " + compId + " успешно удалена");
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Подборка с id: " + compId + " успешно удалена");
     }
 
     /**
