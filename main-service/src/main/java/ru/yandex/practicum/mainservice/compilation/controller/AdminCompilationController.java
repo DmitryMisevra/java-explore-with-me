@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.yandex.practicum.mainservice.compilation.dto.CompilationDto;
 import ru.yandex.practicum.mainservice.compilation.dto.CreatedCompilationDto;
+import ru.yandex.practicum.mainservice.compilation.dto.UpdatedCompilationDto;
 import ru.yandex.practicum.mainservice.compilation.service.CompilationService;
 
 import javax.validation.Valid;
@@ -61,9 +62,9 @@ public class AdminCompilationController {
      */
     @PatchMapping(path = "{compId}")
     ResponseEntity<CompilationDto> updateCompilationById(@PathVariable @Min(1) Long compId,
-                                                         @Valid @RequestBody CreatedCompilationDto createdCompilationDto
+                                                         @Valid @RequestBody UpdatedCompilationDto updatedCompilationDto
     ) {
-        CompilationDto compilationDto = compilationService.updateCompilationById(compId, createdCompilationDto);
+        CompilationDto compilationDto = compilationService.updateCompilationById(compId, updatedCompilationDto);
         log.debug("Подборка c id {} обновлена: {}", compId, compilationDto);
         return ResponseEntity.ok(compilationDto);
     }

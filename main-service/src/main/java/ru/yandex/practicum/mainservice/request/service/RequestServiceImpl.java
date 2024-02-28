@@ -169,7 +169,7 @@ public class RequestServiceImpl implements RequestService {
         RequestStatus status = requestStatusUpdateDto.getStatus();
 
         List<RequestDto> confirmedRequests = new ArrayList<>();
-        List<RequestDto> deniedRequests = new ArrayList<>();
+        List<RequestDto> rejectedRequests = new ArrayList<>();
 
         for (Integer requestId : requestIds) {
             Request request = requestRepository.findById(Long.valueOf(requestId)).orElseThrow(() ->
@@ -188,7 +188,7 @@ public class RequestServiceImpl implements RequestService {
             if (status.equals(RequestStatus.CONFIRMED)) {
                 confirmedRequests.add(requestMapper.requestToRequestDto(request));
             } else {
-                deniedRequests.add(requestMapper.requestToRequestDto(request));
+                rejectedRequests.add(requestMapper.requestToRequestDto(request));
             }
 
             if (isParticipantLimitIsFull(event)) {
@@ -198,9 +198,8 @@ public class RequestServiceImpl implements RequestService {
 
         return RequestStatusAggregateDto.builder()
                 .confirmedRequests(confirmedRequests)
-                .deniedRequests(deniedRequests)
+                .rejectedRequests(rejectedRequests)
                 .build();
-
     }
 
     private boolean isRequestIsDublicated(Long userId, Long eventId) {

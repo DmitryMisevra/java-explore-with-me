@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.mainservice.compilation.dto.CompilationDto;
 import ru.yandex.practicum.mainservice.compilation.dto.CreatedCompilationDto;
+import ru.yandex.practicum.mainservice.compilation.dto.UpdatedCompilationDto;
 import ru.yandex.practicum.mainservice.compilation.mapper.CompilationMapper;
 import ru.yandex.practicum.mainservice.compilation.model.Compilation;
 import ru.yandex.practicum.mainservice.compilation.model.QCompilation;
@@ -84,7 +85,7 @@ public class CompilationServiceImpl implements CompilationService {
     @Override
     public CompilationDto createCompilation(CreatedCompilationDto createdCompilationDto) {
 
-        Compilation compilationToSave = compilationMapper.CompilationDtoToCompilation(createdCompilationDto);
+        Compilation compilationToSave = compilationMapper.createdCompilationDtoToCompilation(createdCompilationDto);
         List<Long> eventIds = createdCompilationDto.getEvents();
         if (eventIds != null && !eventIds.isEmpty()) {
             List<Event> eventList = eventRepository.findAllById(eventIds);
@@ -109,14 +110,14 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     @Override
-    public CompilationDto updateCompilationById(Long compId, CreatedCompilationDto createdCompilationDto) {
+    public CompilationDto updateCompilationById(Long compId, UpdatedCompilationDto updatedCompilationDto) {
         Compilation compilation = compilationRepository.findById(compId).orElseThrow(() ->
                 new NotFoundException("Подборка с id: " + compId + " не найдена"));
 
-        Compilation compilationToUpdate = compilationMapper.CompilationDtoToCompilation(createdCompilationDto);
+        Compilation compilationToUpdate = compilationMapper.updatedCompilationDtoToCompilation(updatedCompilationDto);
         compilation.updateWith(compilationToUpdate);
 
-        List<Long> eventIds = createdCompilationDto.getEvents();
+        List<Long> eventIds = updatedCompilationDto.getEvents();
         if (eventIds != null && !eventIds.isEmpty()) {
             List<Event> eventList = eventRepository.findAllById(eventIds);
             compilation.setEvents(eventList);

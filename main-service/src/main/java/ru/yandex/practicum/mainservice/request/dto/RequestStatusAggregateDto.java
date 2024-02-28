@@ -15,5 +15,5 @@ import java.util.List;
 public class RequestStatusAggregateDto {
 
     private List<RequestDto> confirmedRequests;
-    private List<RequestDto> deniedRequests;
+    private List<RequestDto> rejectedRequests;
 }

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.mainservice.compilation.dto.CompilationDto;
 import ru.yandex.practicum.mainservice.compilation.dto.CreatedCompilationDto;
+import ru.yandex.practicum.mainservice.compilation.dto.UpdatedCompilationDto;
 import ru.yandex.practicum.mainservice.compilation.model.Compilation;
 import ru.yandex.practicum.mainservice.event.mapper.EventMapper;
 
@@ -20,10 +21,17 @@ public class CompilationMapper {
 
     private final EventMapper eventMapper;
 
-    public Compilation CompilationDtoToCompilation(CreatedCompilationDto createdCompilationDto) {
+    public Compilation createdCompilationDtoToCompilation(CreatedCompilationDto createdCompilationDto) {
         return Compilation.builder()
                 .pinned(createdCompilationDto.getPinned())
                 .title(createdCompilationDto.getTitle())
+                .build();
+    }
+
+    public Compilation updatedCompilationDtoToCompilation(UpdatedCompilationDto updatedCompilationDto) {
+        return Compilation.builder()
+                .pinned(updatedCompilationDto.getPinned())
+                .title(updatedCompilationDto.getTitle())
                 .build();
     }
 

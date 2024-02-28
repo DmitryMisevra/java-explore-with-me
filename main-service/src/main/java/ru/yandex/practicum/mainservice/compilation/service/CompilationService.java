@@ -2,6 +2,7 @@ package ru.yandex.practicum.mainservice.compilation.service;
 
 import ru.yandex.practicum.mainservice.compilation.dto.CompilationDto;
 import ru.yandex.practicum.mainservice.compilation.dto.CreatedCompilationDto;
+import ru.yandex.practicum.mainservice.compilation.dto.UpdatedCompilationDto;
 
 import java.util.List;
 
@@ -15,5 +16,5 @@ public interface CompilationService {
 
     void deleteCompilationById(Long compId);
 
-    CompilationDto updateCompilationById(Long compId, CreatedCompilationDto createdCompilationDto);
+    CompilationDto updateCompilationById(Long compId, UpdatedCompilationDto updatedCompilationDto);
 }
