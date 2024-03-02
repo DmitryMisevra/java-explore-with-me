@@ -53,10 +53,6 @@ public class StatsServiceImpl implements StatsService {
             throw new DateTimeValidationException("Время начала события не может быть позже времени его окончания");
         }
 
-        if (startTime.isEqual(endTime)) {
-            throw new DateTimeValidationException("Время начала и окончания события не могут быть одинаковыми");
-        }
-
         BooleanBuilder predicate = new BooleanBuilder(QHit.hit.timestamp.between(startTime, endTime));
 
         if (uris != null && uris.length > 0) {
