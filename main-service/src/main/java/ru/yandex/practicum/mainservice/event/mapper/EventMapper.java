@@ -63,6 +63,7 @@ public class EventMapper {
                 .title(event.getTitle())
                 .state(event.getState())
                 .views(event.getViews())
+                .comments(event.getComments())
                 .build();
     }
 

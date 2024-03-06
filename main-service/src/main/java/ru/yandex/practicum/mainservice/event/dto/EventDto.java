@@ -7,10 +7,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.yandex.practicum.mainservice.category.dto.CategoryDto;
+import ru.yandex.practicum.mainservice.comment.dto.CommentDto;
 import ru.yandex.practicum.mainservice.event.model.State;
 import ru.yandex.practicum.mainservice.user.dto.UserDto;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * EventDto возвращается в http-ответах, когда требуется полная информация о событии
@@ -40,4 +42,5 @@ public class EventDto {
     private String title;
     private State state;
     private Long views;
+    private List<CommentDto> comments;
 }

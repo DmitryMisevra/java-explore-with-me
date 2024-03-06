@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * CompilationMapper дл маппинга CompilationDto
+ * CompilationMapper для маппинга CompilationDto
  */
 @Component
 @RequiredArgsConstructor
@@ -39,7 +39,7 @@ public class CompilationMapper {
         return CompilationDto.builder()
                 .id(compilation.getId())
                 .events(Optional.ofNullable(compilation.getEvents())
-                        .orElseGet(Collections::emptyList) // Возвращает пустой список, если getEvents() == null
+                        .orElseGet(Collections::emptyList)
                         .stream()
                         .map(eventMapper::eventToShortEventDto)
                         .collect(Collectors.toList()))
