@@ -1849,7 +1849,7 @@
 							"",
 							"pm.test(\"Ответ должен быть в формате JSON\", function () {",
                           "    pm.response.to.be.withBody;",
-                          "    pm.response.to.be.json();",
+                          "    pm.response.to.be.json;",
 							"});",
 							"",
 							"pm.test(\"Проверка общего количества объектов в jsonData\", function () {",
