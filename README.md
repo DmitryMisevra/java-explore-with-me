@@ -1,3 +1,5 @@
+## Ссылка на PR c фичей(комментарии): [Перейти](https://github.com/DmitryMisevra/java-explore-with-me/pull/5)
+
 # Explore With Me
 
 ---

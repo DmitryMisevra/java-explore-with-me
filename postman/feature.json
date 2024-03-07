@@ -460,7 +460,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"annotation\": \"Test annotation test annotation 2\",\n  \"category\": 1,\n  \"description\": \"Test description test description 2\",\n  \"eventDate\": \"2024-10-06 15:10:05\",\n  \"location\": {\n    \"lat\": 56.754167,\n    \"lon\": 38.62\n  },\n  \"paid\": false,\n  \"participantLimit\": 15,\n  \"requestModeration\": true,\n  \"title\": \"Test title 2\"\n}",
+					"raw": "{\n  \"annotation\": \"Test annotation test annotation 2\",\n  \"category\": 123,\n  \"description\": \"Test description test description 2\",\n  \"eventDate\": \"2024-10-06 15:10:05\",\n  \"location\": {\n    \"lat\": 56.754167,\n    \"lon\": 38.62\n  },\n  \"paid\": false,\n  \"participantLimit\": 15,\n  \"requestModeration\": true,\n  \"title\": \"Test title 2\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -480,7 +480,7 @@
 					"variable": [
 						{
 							"key": "userId",
-							"value": "1"
+							"value": "138"
 						}
 					]
 				}
@@ -985,7 +985,7 @@
 						},
 						{
 							"key": "commentId",
-							"value": "100"
+							"value": "1000"
 						}
 					]
 				}
@@ -1078,14 +1078,14 @@
 							"pm.test(\"Проверка объекта 'creator'\", function () {",
 							"    var jsonData = pm.response.json();",
 							"    pm.expect(jsonData).to.have.property('creator').that.is.an('object');",
-							"    pm.expect(jsonData.creator).to.have.property('id', 1);",
+							"    pm.expect(jsonData.creator).to.have.property('id', 138);",
 							"    pm.expect(jsonData.creator).to.have.property('name', \"Test Name 1\");",
 							"    pm.expect(jsonData.creator).to.have.property('email', \"test1@test.ru\");",
 							"});",
 							"",
 							"pm.test(\"Проверка поля 'eventId'\", function () {",
 							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData).to.have.property('eventId', 1);",
+							"    pm.expect(jsonData).to.have.property('eventId', 107);",
 							"});"
 						],
 						"type": "text/javascript"
