@@ -41,8 +41,8 @@ public class PrivateRequestController {
     /**
      * Создать запрос на участие
      *
-     * @param userId     id пользователя
-     * @param eventId    id события
+     * @param userId  id пользователя
+     * @param eventId id события
      * @return RequestDto
      */
     @PostMapping

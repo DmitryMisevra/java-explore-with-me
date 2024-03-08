@@ -9,6 +9,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.mainservice.category.model.Category;
 import ru.yandex.practicum.mainservice.category.repository.CategoryRepository;
+import ru.yandex.practicum.mainservice.comment.dto.CommentDto;
+import ru.yandex.practicum.mainservice.comment.mapper.CommentMapper;
+import ru.yandex.practicum.mainservice.comment.model.Comment;
+import ru.yandex.practicum.mainservice.comment.model.QComment;
 import ru.yandex.practicum.mainservice.event.dto.CreatedEventDto;
 import ru.yandex.practicum.mainservice.event.dto.EventDto;
 import ru.yandex.practicum.mainservice.event.dto.ShortEventDto;
@@ -59,6 +63,7 @@ public class EventServiceImpl implements EventService {
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
     private final StatsClient statsClient;
+    private final CommentMapper commentMapper;
 
     @PersistenceContext
     private final EntityManager entityManager;
@@ -105,6 +110,7 @@ public class EventServiceImpl implements EventService {
         location.setId(savedEvent.getId());
         locationRepository.save(location);
         setViewsAndConfirmedRequests(savedEvent);
+        savedEvent.setComments(getEventComments(savedEvent.getId()));
 
         return eventMapper.eventToEventDto(savedEvent);
     }
@@ -126,6 +132,7 @@ public class EventServiceImpl implements EventService {
                 new NotFoundException("Координаты для события с id: " + eventId + " не найдены"));
         event.setLocation(location);
         setViewsAndConfirmedRequests(event);
+        event.setComments(getEventComments(event.getId()));
 
         return eventMapper.eventToEventDto(event);
     }
@@ -181,6 +188,7 @@ public class EventServiceImpl implements EventService {
 
         Event updatedEvent = eventRepository.save(event);
         setViewsAndConfirmedRequests(updatedEvent);
+        updatedEvent.setComments(getEventComments(updatedEvent.getId()));
 
         if (updatedEventDto.getLocation() != null) {
             Location updatedLocation = locationMapper.locationDtoToLocation(updatedEventDto.getLocation());
@@ -243,6 +251,7 @@ public class EventServiceImpl implements EventService {
                             new NotFoundException("Координаты для события с id: " + event.getId() + " не найдены"));
                     event.setLocation(location);
                     setViewsAndConfirmedRequests(event);
+                    event.setComments(getEventComments(event.getId()));
                     return eventMapper.eventToEventDto(event);
                 })
                 .collect(Collectors.toList());
@@ -285,6 +294,7 @@ public class EventServiceImpl implements EventService {
 
         Event updatedEvent = eventRepository.save(event);
         setViewsAndConfirmedRequests(updatedEvent);
+        updatedEvent.setComments(getEventComments(updatedEvent.getId()));
 
         if (updatedEventDto.getLocation() != null) {
             Location updatedLocation = locationMapper.locationDtoToLocation(updatedEventDto.getLocation());
@@ -391,6 +401,7 @@ public class EventServiceImpl implements EventService {
                 new NotFoundException("Координаты для события с id: " + eventId + " не найдены"));
         event.setLocation(location);
         setViewsAndConfirmedRequests(event);
+        event.setComments(getEventComments(event.getId()));
 
         saveHit(request);
 
@@ -470,5 +481,20 @@ public class EventServiceImpl implements EventService {
                 .build();
 
         statsClient.createHit(createdHitDto);
+    }
+
+    private List<CommentDto> getEventComments(Long eventId) {
+        JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+        QComment qComment = QComment.comment;
+
+        List<Comment> commentList = queryFactory
+                .selectFrom(qComment)
+                .where(qComment.event.id.eq(eventId))
+                .orderBy(qComment.created.desc())
+                .fetch();
+
+        return commentList.stream()
+                .map(commentMapper::CommentToCommentDto)
+                .collect(Collectors.toList());
     }
 }

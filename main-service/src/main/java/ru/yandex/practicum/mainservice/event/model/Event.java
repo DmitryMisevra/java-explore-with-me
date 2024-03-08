@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.yandex.practicum.mainservice.category.model.Category;
+import ru.yandex.practicum.mainservice.comment.dto.CommentDto;
 import ru.yandex.practicum.mainservice.user.model.User;
 
 import javax.persistence.Column;
@@ -24,6 +25,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * Базовая сущность Event
@@ -95,6 +97,9 @@ public class Event {
 
     @Transient
     private Long views;
+
+    @Transient
+    private List<CommentDto> comments;
 
     @PrePersist
     protected void onCreate() {

@@ -5,6 +5,12 @@ delete
 from compilations;
 
 delete
+from locations;
+
+delete
+from comments;
+
+delete
 from events;
 
 delete
@@ -12,9 +18,6 @@ from users;
 
 delete
 from requests;
-
-delete
-from locations;
 
 delete
 from categories;
@@ -30,6 +33,9 @@ alter table categories
 
 alter table events
     alter column event_id restart with 1;
+
+alter table comments
+    alter column comment_id restart with 1;
 
 alter table requests
     alter column request_id restart with 1;
